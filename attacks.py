@@ -39,7 +39,7 @@ def linf_project(org_images, adv_images, eps):
 
 class Attack():
     
-    def __init__(self, model, eps, step_size, n_steps, norm='inf', loss_type='xent', random_start=False, centroids=None, name=None):
+    def __init__(self, model, eps, step_size, n_steps, norm='inf', loss_type='xent', random_start=False, name=None):
         
         self.model = model
         self.eps = float(eps)
@@ -48,7 +48,6 @@ class Attack():
         self.norm = norm
         self.loss_type = loss_type
         self.random_start = random_start
-        self.centroids = tf.constant(centroids, dtype=tf.float32, name='centroids') if centroids is not None else None
         self.name = name
 
     def _get_loss(self, X):
@@ -67,22 +66,15 @@ class Attack():
                 c_logit = tf.reduce_sum(label_mask * logits, axis=1)
                 w_logit = tf.reduce_max((1 - label_mask) * logits, axis=1)
                 
-                #  Attack for analysis: Modify CW loss such that attack reaches end of epsilon-ball
-                loss = w_logit - c_logit
+                # Attack for analysis: Modify CW loss such that attack reaches end of epsilon-ball
+                # loss = w_logit - c_logit
                 
                 # Attack for training: constrain the maximum loss
-                # loss = -tf.nn.relu(c_logit - w_logit + 500)
+                loss = -tf.nn.relu(c_logit - w_logit + 500)
 
             else:
 
                 raise Exception('{} loss is not available.'.format(self.loss_type))
-            
-            if self.centroids is not None:
-                
-                label_mask = tf.one_hot(self.model.Y, depth=self.model.n_classes, on_value=1.0, off_value=0.0)
-                logits = logits - label_mask * 10000
-                centroids = tf.gather(self.centroids, tf.argmax(logits, axis=1))
-                loss -= 0.1 * tf.nn.l2_loss(X - centroids)
 
         return loss
 
@@ -162,9 +154,9 @@ class Attack():
 
 class GM(Attack):
     
-    def __init__(self, model, eps, step_size, n_steps, norm='inf', loss_type='xent', random_start=False, centroids=None, name='GM'):
+    def __init__(self, model, eps, step_size, n_steps, norm='inf', loss_type='xent', random_start=False, name='GM'):
         
-        super(GM, self).__init__(model, eps, step_size, n_steps, norm, loss_type, random_start, centroids, name)
+        super(GM, self).__init__(model, eps, step_size, n_steps, norm, loss_type, random_start, name)
         
         self._build_attack()
     
@@ -175,49 +167,5 @@ class GM(Attack):
             
             loss = self._get_loss(X)
             perturbation = tf.gradients(loss, X)[0]
-
-        return perturbation
-
-
-class RGM(Attack):
-
-    def __init__(self, model, angle, eps, step_size, n_steps, norm='inf', loss_type='xent', random_start=False, centroids=None, name='RGM'):
-
-        super(RGM, self).__init__(model, eps, step_size, n_steps, norm, loss_type, random_start, centroids, name)
-
-        self.angle = angle * np.pi / 180
-
-        self._build_attack()
-
-    # RGM method uses rotated gradient
-    def _get_perturbation(self, X):
-
-        with tf.name_scope(self.name):
-
-            loss = self._get_loss(X)
-            gradient = tf.gradients(loss, X)[0]
-            shape = tf.shape(gradient)
-            
-            gradient = tf.reshape(gradient, shape=[-1, shape[1] * shape[2] * shape[3]])
-            
-            ps = tf.transpose(gradient)
-            zs = tf.random_normal(shape=tf.shape(ps))
-            
-            A = gradient
-            A_t = tf.transpose(A) / tf.diag_part(tf.tensordot(A, A, axes=[[1], [1]]))
-            
-            k1 = tf.expand_dims(tf.transpose(A_t), axis=2)
-            k2 = tf.expand_dims(A, axis=1)
-            k3 = tf.expand_dims(tf.transpose(zs), axis=2)
-            
-            zs -= tf.transpose(tf.squeeze(tf.matmul(tf.matmul(k1, k2), k3)))
-            
-            ys = A_t * tf.diag_part(tf.matmul(A, ps)) * tf.cos(self.angle)
-            
-            ps_norm = tf.norm(ps, axis=0, keepdims=True)
-            zs_norm = tf.norm(zs, axis=0, keepdims=True)
-            ys_norm = tf.norm(ys, axis=0, keepdims=True)
-            
-            perturbation = tf.reshape(tf.transpose(ys + (zs / zs_norm) * tf.sqrt(tf.abs(ps_norm ** 2 - ys_norm ** 2))), shape=shape)
 
         return perturbation
