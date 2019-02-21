@@ -1,24 +1,22 @@
 import math
 
-from tqdm import tqdm
-
-import tensorflow as tf
 import numpy as np
+import tensorflow as tf
+from tqdm import tqdm
 
 from utils import save
 
 
 def l2_norm(x):
-    
     if len(x.shape.as_list()) > 2:
-        return (tf.sqrt(tf.reduce_sum(x ** 2, axis=[1,2,3])))[..., None, None, None]
+        return (tf.sqrt(tf.reduce_sum(x ** 2, axis=[1, 2, 3])))[..., None, None, None]
     else:
-        return (tf.sqrt(tf.reduce_sum(x ** 2 ,axis=[1])))[..., None]
+        return (tf.sqrt(tf.reduce_sum(x ** 2, axis=[1])))[..., None]
+
 
 def l2_project(org_images, adv_images, eps):
-
     deltas = adv_images - org_images
-    
+
     norms = l2_norm(deltas)
     delta_normalized = deltas / (norms + 1e-8) * tf.minimum(eps, norms)
 
@@ -28,19 +26,18 @@ def l2_project(org_images, adv_images, eps):
 
     return adv_images
 
+
 def linf_project(org_images, adv_images, eps):
-    
     # Add l-inf normalized perturbation and clip to ensure valid pixel range
     adv_images = tf.clip_by_value(adv_images, org_images - eps, org_images + eps)
     adv_images = tf.clip_by_value(adv_images, -1, 1)
-    
+
     return adv_images
 
 
 class Attack():
-    
     def __init__(self, model, eps, step_size, n_steps, norm='inf', loss_type='xent', random_start=False, name=None):
-        
+
         self.model = model
         self.eps = float(eps)
         self.step_size = float(step_size)
@@ -62,13 +59,14 @@ class Attack():
             elif self.loss_type == 'cw':
 
                 logits = self.model.classify(X)
-                label_mask = tf.one_hot(self.model.Y, depth=self.model.n_classes, on_value=1.0, off_value=0.0, dtype=tf.float32)
+                label_mask = tf.one_hot(self.model.Y, depth=self.model.n_classes, on_value=1.0, off_value=0.0,
+                                        dtype=tf.float32)
                 c_logit = tf.reduce_sum(label_mask * logits, axis=1)
                 w_logit = tf.reduce_max((1 - label_mask) * logits, axis=1)
-                
+
                 # Attack for analysis: Modify CW loss such that attack reaches end of epsilon-ball
                 # loss = w_logit - c_logit
-                
+
                 # Attack for training: constrain the maximum loss
                 loss = -tf.nn.relu(c_logit - w_logit + 500)
 
@@ -80,9 +78,9 @@ class Attack():
 
     # Build self.perturbation
     def _get_perturbation(self, X):
-        
+
         raise NotImplementedError
-    
+
     def _build_attack(self):
 
         init_attacks = self.model.X
@@ -130,41 +128,36 @@ class Attack():
         _, attacks = tf.while_loop(cond, body, initial_vars, back_prop=False, parallel_iterations=1)
 
         self.attacks = tf.stop_gradient(attacks)
-    
+
     def attack(self, sess, inputs, savedir=None, batch_size=100, show_progress=True):
-        
+
         res = []
-        n_itr = math.ceil(len(inputs[0]) / batch_size)
-        
+        n_itr = int(math.ceil(len(inputs[0]) / batch_size))
+
         iterator = tqdm(range(n_itr)) if show_progress else range(n_itr)
-        
+
         for itr in iterator:
-            
-            batch_xs, batch_ys = inputs[0][itr * batch_size:(itr + 1) * batch_size], inputs[1][itr * batch_size:(itr + 1) * batch_size]
+            batch_xs = inputs[0][itr * batch_size:(itr + 1) * batch_size]
+            batch_ys = inputs[1][itr * batch_size:(itr + 1) * batch_size]
             res.append(sess.run(self.attacks, feed_dict={self.model.X: batch_xs, self.model.Y: batch_ys}))
-        
+
         res = np.concatenate(res, axis=0)
-        
+
         if savedir:
-            
             save(res, savedir)
-        
+
         return res
 
 
 class GM(Attack):
-    
     def __init__(self, model, eps, step_size, n_steps, norm='inf', loss_type='xent', random_start=False, name='GM'):
-        
         super(GM, self).__init__(model, eps, step_size, n_steps, norm, loss_type, random_start, name)
-        
+
         self._build_attack()
-    
+
     # Gradient method uses vanilla gradient
     def _get_perturbation(self, X):
-
         with tf.name_scope(self.name):
-            
             loss = self._get_loss(X)
             perturbation = tf.gradients(loss, X)[0]
 
