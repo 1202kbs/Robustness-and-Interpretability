@@ -15,64 +15,6 @@ def l2_norm(x):
     return (tf.sqrt(tf.reduce_sum(x ** 2, axis=[1,2,3])))[..., None, None, None]
 
 
-class Projection():
-    
-    def __init__(self, vae_gan, batch_size, learning_rate=0.09):
-        
-        self.vae_gan = vae_gan
-        self.batch_size = batch_size
-        self.learning_rate = learning_rate
-        
-        self._build_projection()
-    
-    def _build_projection(self):
-        
-        with tf.variable_scope(self.vae_gan.name):
-            
-            with tf.variable_scope('Projection'):
-                
-                z_proj = tf.get_variable('z_proj', shape=[self.batch_size, self.vae_gan.zdim], initializer=tf.truncated_normal_initializer())
-            
-            self.X_proj = self.vae_gan.decode(z_proj)
-            
-            with tf.variable_scope('Projection'):
-                
-                self.proj_loss = tf.nn.l2_loss(self.vae_gan.X - self.X_proj)
-                self.proj_train = tf.train.AdamOptimizer(self.learning_rate).minimize(self.proj_loss, var_list=[z_proj])
-            
-            # Initializer for variables necessary for projection
-            self.proj_init = tf.variables_initializer([v for v in tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES) if 'Projection' in v.name])
-    
-    def project(self, sess, dataset, n_steps=100):
-        
-        N = len(dataset[0])
-        
-        if N % self.batch_size != 0:
-            
-            pad_size = self.batch_size - N % self.batch_size
-            pad = np.tile(dataset[0][None,0], reps=[pad_size, 1, 1, 1])
-            padded_dataset = np.concatenate((dataset[0], pad), axis=0)
-            dataset = (padded_dataset, dataset[1])
-        
-        n_itrs = math.ceil(N / self.batch_size)
-        res = []
-        
-        for itr in tqdm(range(n_itrs)):
-            
-            sess.run(self.proj_init)
-            
-            batch_xs = dataset[0][itr * self.batch_size:(itr + 1) * self.batch_size]
-            
-            for step in range(n_steps):
-                
-                l, _ = sess.run([self.proj_loss, self.proj_train], feed_dict={self.vae_gan.X: batch_xs})
-                # print(np.mean(l))
-            
-            res.append(sess.run(self.X_proj, feed_dict={self.vae_gan.X: batch_xs}))
-        
-        return np.concatenate(res, axis=0)[:N]
-
-
 class Model():
     
     def __init__(self, logdir, lmda=1.0, zdim=100, learning_rate=1e-3, beta1=0.9, beta2=0.99, name=None):

@@ -84,27 +84,3 @@ def SN_Conv(inputs, kernel, strides, padding='VALID', beta=1.0, Ip=1, reuse=Fals
             w_norm = kernel / sigma
         
     return w_norm
-
-
-def OR(kernel, name='OR'):
-    
-    with tf.name_scope(name):
-        
-        cols = tf.size(kernel[0])
-        rows = tf.shape(kernel)[0]
-        
-        w1 = tf.reshape(kernel, shape=[-1,cols])
-        wt = tf.transpose(w1)
-        loss = tf.norm(tf.matmul(wt, w1) - tf.eye(cols))
-    
-    return loss
-
-
-def Random_Mask(inputs, rate, name='RandomMask'):
-    
-    with tf.name_scope(name):
-        
-        mask = tf.constant(np.random.binomial(n = 1, p = 1 - rate, size=inputs.shape.as_list()[1:]), dtype=tf.float32, name='Mask')
-        outputs = tf.multiply(mask, inputs)
-    
-    return outputs

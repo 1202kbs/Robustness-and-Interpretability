@@ -10,7 +10,7 @@ from layers import RegDense, RegConv2D, RegConv2DTranspose
 
 class Model():
     
-    def __init__(self, logdir, n_classes, activation=None, use_batchnorm=False, droprate=None, dbrate=None, rmrate=None, snbeta=None, l2rate=None, gprate=None, orrate=None, lprate=None, attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3, name=None):
+    def __init__(self, logdir, n_classes, activation=None, use_batchnorm=False, droprate=None, snbeta=None, l2rate=None, attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3, name=None):
         
         if not os.path.exists(logdir):
             
@@ -21,13 +21,8 @@ class Model():
         self.activation = activation
         self.use_batchnorm = use_batchnorm
         self.droprate = droprate
-        self.dbrate = dbrate
-        self.rmrate = rmrate
         self.snbeta = snbeta
         self.l2rate = l2rate
-        self.gprate = gprate
-        self.orrate = orrate
-        self.lprate = lprate
         self.attack = attack
         self.attack_params = attack_params
         self.optimizer = optimizer(learning_rate)
@@ -61,23 +56,6 @@ class Model():
             with tf.name_scope('CELoss'):
 
                 self.cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=self.logits, labels=self.Y_hot))
-            
-            if self.gprate:
-                
-                with tf.name_scope('GPLoss'):
-                    
-                    gradient = tf.gradients(self.cross_entropy, self.X)[0]
-                    slopes = tf.sqrt(tf.reduce_sum(tf.square(gradient), reduction_indices=(1,2,3)))
-                    gradient_penalty = tf.reduce_mean(slopes ** 2)
-                    tf.add_to_collection('RegLosses', self.gprate * gradient_penalty)
-            
-            if self.lprate:
-                
-                with tf.name_scope('LPLoss'):
-                    
-                    gradient = tf.gradients(self.cross_entropy, self.X)[0]
-                    lipschitz_penalty = tf.norm(tf.reduce_max(gradient, axis=0))
-                    tf.add_to_collection('RegLosses', self.lprate * lipschitz_penalty)
             
             with tf.name_scope('RegLoss'):
                 
@@ -147,16 +125,16 @@ class Model():
 
 class MNORM_DNN(Model):
     
-    def __init__(self, logdir, n_classes, activation=None, use_batchnorm=False, droprate=None, dbrate=None, rmrate=None, snbeta=None, l2rate=None, gprate=None, orrate=None, lprate=None, attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3, name='MNORM_DNN'):
+    def __init__(self, logdir, n_classes, activation=None, use_batchnorm=False, droprate=None, snbeta=None, l2rate=None, attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3, name='MNORM_DNN'):
         
-        super(MNORM_DNN, self).__init__(logdir, n_classes, activation, use_batchnorm, droprate, dbrate, rmrate, snbeta, l2rate, gprate, orrate, lprate, attack, attack_params, optimizer, learning_rate, name)
+        super(MNORM_DNN, self).__init__(logdir, n_classes, activation, use_batchnorm, droprate,snbeta, l2rate, attack, attack_params, optimizer, learning_rate, name)
         
         self.X = tf.placeholder(tf.float32, [None,2], 'X')
         self.Y = tf.placeholder(tf.int64, [None], 'Y')
         self.training = tf.placeholder_with_default(False, [], 'training')
         
         params = {'training': self.training, 'use_batchnorm': self.use_batchnorm, 'droprate': self.droprate, \
-                  'dbrate': self.dbrate, 'rmrate': self.rmrate, 'snbeta': self.snbeta, 'l2rate': self.l2rate, 'orrate': self.orrate}
+                  'snbeta': self.snbeta, 'l2rate': self.l2rate}
         
         self.layers = [RegDense(units=128, activation=self.activation, name='dense1', **params), 
                        RegDense(units=self.n_classes, name='dense2', **params)]
@@ -173,45 +151,11 @@ class MNORM_DNN(Model):
         return outputs
 
 
-class MNIST2_CNN(Model):
-    
-    def __init__(self, logdir, n_classes=2, activation=None, use_batchnorm=False, droprate=None, dbrate=None, rmrate=None, snbeta=None, l2rate=None, gprate=None, orrate=None, lprate=None, attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3, name='MNIST2_CNN'):
-        
-        super(MNIST2_CNN, self).__init__(logdir, n_classes, activation, use_batchnorm, droprate, dbrate, rmrate, snbeta, l2rate, gprate, orrate, lprate, attack, attack_params, optimizer, learning_rate, name)
-        
-        self.X = tf.placeholder(tf.float32, [None, 28, 28, 1], 'X')
-        self.Y = tf.placeholder(tf.int64, [None], 'Y')
-        self.training = tf.placeholder_with_default(False, [], 'training')
-        
-        # We follow the architecture in TensorFlow tutorial but do not use dropout to remove any external influence.
-        params1 = {'training': self.training, 'kernel_size': [5,5], 'padding': 'SAME', 'activation': self.activation, \
-                   'use_batchnorm': self.use_batchnorm, 'droprate': self.droprate, 'dbrate': self.dbrate, 'rmrate': self.rmrate, \
-                   'snbeta': self.snbeta, 'l2rate': self.l2rate, 'orrate': self.orrate}
-        params2 = {'training': self.training, 'activation': self.activation, 'use_batchnorm': self.use_batchnorm, 'droprate': self.droprate, \
-                   'dbrate': self.dbrate, 'rmrate': self.rmrate, 'snbeta': self.snbeta, 'l2rate': self.l2rate, 'orrate': self.orrate}
-        params3 = {'training': self.training, 'snbeta': self.snbeta, 'l2rate': self.l2rate, 'orrate': self.orrate}
-        
-        self.layers = [RegDense(units=512, name='dense1', **params2), 
-                       RegDense(units=self.n_classes, name='dense2', **params3)]
-        
-        self._build_model()
-        self._init_saver()
-    
-    def classify(self, inputs):
-        
-        with tf.variable_scope(self.name, reuse=tf.AUTO_REUSE):
-            
-            outputs = tf.reshape(inputs, [-1, 28 * 28 * 1], name='flat1')
-            outputs = reduce((lambda x, y: y(x)), [outputs] + self.layers)
-        
-        return outputs
-
-
 class MNIST_CNN(Model):
     
-    def __init__(self, logdir, n_classes=10, activation=None, use_batchnorm=False, droprate=None, dbrate=None, rmrate=None, snbeta=None, l2rate=None, gprate=None, orrate=None, lprate=None, attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3, name='MNIST_CNN'):
+    def __init__(self, logdir, n_classes=10, activation=None, use_batchnorm=False, droprate=None, snbeta=None, l2rate=None, attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3, name='MNIST_CNN'):
         
-        super(MNIST_CNN, self).__init__(logdir, n_classes, activation, use_batchnorm, droprate, dbrate, rmrate, snbeta, l2rate, gprate, orrate, lprate, attack, attack_params, optimizer, learning_rate, name)
+        super(MNIST_CNN, self).__init__(logdir, n_classes, activation, use_batchnorm, droprate, snbeta, l2rate, attack, attack_params, optimizer, learning_rate, name)
         
         self.X = tf.placeholder(tf.float32, [None, 28, 28, 1], 'X')
         self.Y = tf.placeholder(tf.int64, [None], 'Y')
@@ -219,11 +163,10 @@ class MNIST_CNN(Model):
         
         # We follow the architecture in TensorFlow tutorial but do not use dropout to remove any external influence.
         params1 = {'training': self.training, 'kernel_size': [5,5], 'padding': 'SAME', 'activation': self.activation, \
-                   'use_batchnorm': self.use_batchnorm, 'droprate': self.droprate, 'dbrate': self.dbrate, 'rmrate': self.rmrate, \
-                   'snbeta': self.snbeta, 'l2rate': self.l2rate, 'orrate': self.orrate}
+                   'use_batchnorm': self.use_batchnorm, 'droprate': self.droprate, 'snbeta': self.snbeta, 'l2rate': self.l2rate}
         params2 = {'training': self.training, 'activation': self.activation, 'use_batchnorm': self.use_batchnorm, 'droprate': self.droprate, \
-                   'dbrate': self.dbrate, 'rmrate': self.rmrate, 'snbeta': self.snbeta, 'l2rate': self.l2rate, 'orrate': self.orrate}
-        params3 = {'training': self.training, 'snbeta': self.snbeta, 'l2rate': self.l2rate, 'orrate': self.orrate}
+                   'snbeta': self.snbeta, 'l2rate': self.l2rate}
+        params3 = {'training': self.training, 'snbeta': self.snbeta, 'l2rate': self.l2rate}
         
         n_filters = [32, 64]
         
@@ -254,20 +197,19 @@ class MNIST_CNN(Model):
 
 class CIFAR_CNN(Model):
     
-    def __init__(self, logdir, n_classes=10, activation=None, use_batchnorm=False, droprate=None, dbrate=None, rmrate=None, snbeta=None, l2rate=None, gprate=None, orrate=None, lprate=None, attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3, name='CIFAR_CNN'):
+    def __init__(self, logdir, n_classes=10, activation=None, use_batchnorm=False, droprate=None, snbeta=None, l2rate=None, attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3, name='CIFAR_CNN'):
         
-        super(CIFAR_CNN, self).__init__(logdir, n_classes, activation, use_batchnorm, droprate, dbrate, rmrate, snbeta, l2rate, gprate, orrate, lprate, attack, attack_params, optimizer, learning_rate, name)
+        super(CIFAR_CNN, self).__init__(logdir, n_classes, activation, use_batchnorm, droprate, snbeta, l2rate, attack, attack_params, optimizer, learning_rate, name)
         
         self.X = tf.placeholder(tf.float32, [None, 32, 32, 3], 'X')
         self.Y = tf.placeholder(tf.int64, [None], 'Y')
         self.training = tf.placeholder_with_default(False, [], 'training')
         
         params1 = {'training': self.training, 'kernel_size': [3,3], 'padding': 'SAME', 'activation': self.activation, \
-                   'use_batchnorm': self.use_batchnorm, 'droprate': self.droprate, 'dbrate': self.dbrate, 'rmrate': self.rmrate, \
-                   'snbeta': self.snbeta, 'l2rate': self.l2rate, 'orrate': self.orrate}
+                   'use_batchnorm': self.use_batchnorm, 'droprate': self.droprate, 'snbeta': self.snbeta, 'l2rate': self.l2rate}
         params2 = {'training': self.training, 'activation': self.activation, 'use_batchnorm': self.use_batchnorm, 'droprate': self.droprate, \
-                   'dbrate': self.dbrate, 'rmrate': self.rmrate, 'snbeta': self.snbeta, 'l2rate': self.l2rate, 'orrate': self.orrate}
-        params3 = {'training': self.training, 'snbeta': self.snbeta, 'l2rate': self.l2rate, 'orrate': self.orrate}
+                   'snbeta': self.snbeta, 'l2rate': self.l2rate}
+        params3 = {'training': self.training, 'snbeta': self.snbeta, 'l2rate': self.l2rate}
         
         n_filters = [32, 32, 64, 64]
         
