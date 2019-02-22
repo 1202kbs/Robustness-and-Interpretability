@@ -6,7 +6,7 @@ import numpy as np
 from utils import save
 
 
-class Trainer():
+class TrainerForClassifier(object):
     def __init__(self, sess, model, data_train, data_test=None, data_adv=None, batch_size=100):
 
         self.sess = sess
@@ -21,7 +21,7 @@ class Trainer():
 
         for epoch in range(n_epochs):
 
-            train_loss, train_acc, test_acc, adv_acc = self.train_epoch(epoch)
+            train_loss, train_acc, test_acc, adv_acc = self.train_epoch()
 
             if (epoch + 1) % p_epochs == 0:
                 print(
@@ -35,11 +35,11 @@ class Trainer():
 
         save(self.stats, self.model.logdir + 'stats.pickle')
 
-    def train_epoch(self, epoch):
+    def train_epoch(self):
 
         avg_loss = 0
         avg_acc = 0
-        n_itrs = math.ceil(len(self.data_train[0]) / self.batch_size)
+        n_itrs = int(math.ceil(len(self.data_train[0]) / self.batch_size))
 
         for itr in range(n_itrs):
             loss, acc = self.train_step(itr)
@@ -63,9 +63,8 @@ class Trainer():
         return loss, acc
 
 
-class VAE_GAN_Trainer():
+class TrainerForVAEGAN(object):
     def __init__(self, sess, model, data_train, n_dis=1, batch_size=100):
-
         self.sess = sess
         self.model = model
         self.data_train = data_train
@@ -73,7 +72,8 @@ class VAE_GAN_Trainer():
         self.batch_size = batch_size
         self.stats = {'Enc Loss': [], 'Dec Loss': [], 'Disc Loss': []}
 
-    def __visualize(self, images, title):
+    @staticmethod
+    def __visualize(images, title):
 
         plt.figure(figsize=(4, 4))
 
@@ -100,7 +100,7 @@ class VAE_GAN_Trainer():
 
         for epoch in range(n_epochs):
 
-            losses = self.train_epoch(epoch)
+            losses = self.train_epoch()
 
             if (epoch + 1) % p_epochs == 0:
                 print('Epoch : {:<3d} | Enc Loss : {:.5f} | Dec Loss : {:.5f} | Disc Loss : {:.5f}'.format(epoch + 1,
@@ -111,8 +111,8 @@ class VAE_GAN_Trainer():
                 recs = (self.model.reconstruct(self.sess, (self.data_train[0][:16], self.data_train[1][:16])) + 1) * 0.5
                 gens = (self.model.generate(self.sess, 16) + 1) * 0.5
 
-                self.__visualize(recs, 'Reconstructions')
-                self.__visualize(gens, 'Generations')
+                TrainerForVAEGAN.__visualize(recs, 'Reconstructions')
+                TrainerForVAEGAN.__visualize(gens, 'Generations')
 
             self.stats['Enc Loss'].append(losses[0])
             self.stats['Dec Loss'].append(losses[1])
@@ -120,7 +120,7 @@ class VAE_GAN_Trainer():
 
         save(self.stats, self.model.logdir + 'stats.pickle')
 
-    def train_epoch(self, epoch):
+    def train_epoch(self):
 
         avg_enc_loss = 0
         avg_dec_loss = 0
@@ -139,9 +139,7 @@ class VAE_GAN_Trainer():
 
     def train_step(self, itr):
 
-        batch_xs, batch_ys = self.data_train[0][itr * self.batch_size:(itr + 1) * self.batch_size], self.data_train[1][
-                                                                                                    itr * self.batch_size:(
-                                                                                                                          itr + 1) * self.batch_size]
+        batch_xs = self.data_train[0][itr * self.batch_size:(itr + 1) * self.batch_size]
 
         feed_dict = {self.model.X: batch_xs, self.model.training: True}
         _, enc_loss = self.sess.run([self.model.enc_train, self.model.enc_loss], feed_dict=feed_dict)
@@ -150,4 +148,4 @@ class VAE_GAN_Trainer():
         for _ in range(self.n_dis):
             _, disc_loss = self.sess.run([self.model.disc_train, self.model.disc_loss], feed_dict=feed_dict)
 
-        return (enc_loss, dec_loss, disc_loss)
+        return enc_loss, dec_loss, disc_loss

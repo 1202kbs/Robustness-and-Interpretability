@@ -3,7 +3,7 @@ import tensorflow as tf
 import regularizers as regs
 
 
-class RegLayer():
+class RegLayer(object):
     def __init__(self, training, activation=None, use_batchnorm=False, droprate=None, snbeta=None, l2rate=None,
                  name=None):
 
@@ -46,7 +46,7 @@ class RegDense(RegLayer):
                                       initializer=tf.glorot_uniform_initializer())
         self.bias = tf.get_variable(name='bias', shape=[self.units], initializer=tf.constant_initializer(0.0))
 
-        if self.snbeta: self.kernel = regs.SN_Dense(inputs, self.kernel, self.snbeta)
+        if self.snbeta: self.kernel = regs.SN_Dense(self.kernel, self.snbeta)
         if self.l2rate: tf.add_to_collection('RegLosses', self.l2rate * regs.L2(self.kernel))
 
         return self.activation(tf.matmul(inputs, self.kernel) + self.bias)

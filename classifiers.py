@@ -8,7 +8,7 @@ import tensorflow as tf
 from layers import RegDense, RegConv2D
 
 
-class Model:
+class Base_Classifier(object):
     def __init__(self, logdir, n_classes, activation=None, use_batchnorm=False, droprate=None, snbeta=None, l2rate=None,
                  attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3, name=None):
 
@@ -98,8 +98,8 @@ class Model:
         avg_acc = 0
 
         for itr in range(n_itrs):
-            batch_xs, batch_ys = dataset[0][itr * batch_size:(itr + 1) * batch_size], dataset[1][itr * batch_size:(
-                                                                                                                  itr + 1) * batch_size]
+            batch_xs = dataset[0][itr * batch_size:(itr + 1) * batch_size]
+            batch_ys = dataset[1][itr * batch_size:(itr + 1) * batch_size]
 
             feed_dict = {self.X: batch_xs, self.Y: batch_ys, self.training: False}
             acc = sess.run(self.accuracy, feed_dict=feed_dict)
@@ -121,18 +121,18 @@ class Model:
         return np.concatenate(res, axis=0)
 
 
-class MIXNORM_DNN(Model):
+class MIXNORM_DNN(Base_Classifier):
     def __init__(self, logdir, n_classes, activation=None, use_batchnorm=False, droprate=None, snbeta=None, l2rate=None,
                  attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3,
                  name='MIXNORM_DNN'):
-        super(MNORM_DNN, self).__init__(logdir, n_classes, activation, use_batchnorm, droprate, snbeta, l2rate, attack,
-                                        attack_params, optimizer, learning_rate, name)
+        super(MIXNORM_DNN, self).__init__(logdir, n_classes, activation, use_batchnorm, droprate, snbeta, l2rate, attack,
+                                          attack_params, optimizer, learning_rate, name)
 
         self.X = tf.placeholder(tf.float32, [None, 2], 'X')
         self.Y = tf.placeholder(tf.int64, [None], 'Y')
         self.training = tf.placeholder_with_default(False, [], 'training')
 
-        params = {'training': self.training, 'use_batchnorm': self.use_batchnorm, 'droprate': self.droprate, \
+        params = {'training': self.training, 'use_batchnorm': self.use_batchnorm, 'droprate': self.droprate,
                   'snbeta': self.snbeta, 'l2rate': self.l2rate}
 
         self.layers = [RegDense(units=128, activation=self.activation, name='dense1', **params),
@@ -148,7 +148,7 @@ class MIXNORM_DNN(Model):
         return outputs
 
 
-class MNIST_CNN(Model):
+class MNIST_CNN(Base_Classifier):
     def __init__(self, logdir, n_classes=10, activation=None, use_batchnorm=False, droprate=None, snbeta=None,
                  l2rate=None, attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3,
                  name='MNIST_CNN'):
@@ -160,7 +160,7 @@ class MNIST_CNN(Model):
         self.training = tf.placeholder_with_default(False, [], 'training')
 
         # We follow the architecture in TensorFlow tutorial but do not use dropout to remove any external influence.
-        params1 = {'training': self.training, 'kernel_size': [5, 5], 'padding': 'SAME', 'activation': self.activation, \
+        params1 = {'training': self.training, 'kernel_size': [5, 5], 'padding': 'SAME', 'activation': self.activation,
                    'use_batchnorm': self.use_batchnorm, 'droprate': self.droprate, 'snbeta': self.snbeta,
                    'l2rate': self.l2rate}
         params2 = {'training': self.training, 'activation': self.activation, 'use_batchnorm': self.use_batchnorm,
@@ -191,7 +191,7 @@ class MNIST_CNN(Model):
         return outputs
 
 
-class CIFAR_CNN(Model):
+class CIFAR_CNN(Base_Classifier):
     def __init__(self, logdir, n_classes=10, activation=None, use_batchnorm=False, droprate=None, snbeta=None,
                  l2rate=None, attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3,
                  name='CIFAR_CNN'):
