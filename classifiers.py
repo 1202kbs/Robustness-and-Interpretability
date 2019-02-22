@@ -121,10 +121,10 @@ class Model:
         return np.concatenate(res, axis=0)
 
 
-class MNORM_DNN(Model):
+class MIXNORM_DNN(Model):
     def __init__(self, logdir, n_classes, activation=None, use_batchnorm=False, droprate=None, snbeta=None, l2rate=None,
                  attack=None, attack_params=None, optimizer=tf.train.AdamOptimizer, learning_rate=1e-3,
-                 name='MNORM_DNN'):
+                 name='MIXNORM_DNN'):
         super(MNORM_DNN, self).__init__(logdir, n_classes, activation, use_batchnorm, droprate, snbeta, l2rate, attack,
                                         attack_params, optimizer, learning_rate, name)
 
