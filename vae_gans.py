@@ -12,7 +12,7 @@ def l2_norm(x):
     return (tf.sqrt(tf.reduce_sum(x ** 2, axis=[1, 2, 3])))[..., None, None, None]
 
 
-class Model:
+class Base_VAE_GAN(object):
     def __init__(self, logdir, lmda=1.0, zdim=100, learning_rate=1e-3, beta1=0.9, beta2=0.99, name=None):
 
         if not os.path.exists(logdir):
@@ -147,7 +147,7 @@ class Model:
         self.saver = tf.train.Saver()
 
 
-class MNIST_VAE_GAN(Model):
+class MNIST_VAE_GAN(Base_VAE_GAN):
     def __init__(self, logdir, lmda=1.0, zdim=10, learning_rate=5e-4, beta1=0.5, beta2=0.9, name='MNIST_VAE_GAN'):
         super(MNIST_VAE_GAN, self).__init__(logdir, lmda, zdim, learning_rate, beta1, beta2, name)
 
@@ -222,7 +222,7 @@ class MNIST_VAE_GAN(Model):
         return outputs
 
 
-class CIFAR_VAE_GAN(Model):
+class CIFAR_VAE_GAN(Base_VAE_GAN):
     def __init__(self, logdir, lmda=1e-3, zdim=128, learning_rate=2e-4, beta1=0.0, beta2=0.9, name='CIFAR_VAE_GAN'):
         super(CIFAR_VAE_GAN, self).__init__(logdir, lmda, zdim, learning_rate, beta1, beta2, name)
 

@@ -35,7 +35,7 @@ def linf_project(org_images, adv_images, eps):
     return adv_images
 
 
-class Attack():
+class Attacker(object):
     def __init__(self, model, eps, step_size, n_steps, norm='inf', loss_type='xent', random_start=False, name=None):
 
         self.model = model
@@ -149,7 +149,7 @@ class Attack():
         return res
 
 
-class GM(Attack):
+class GM(Attacker):
     def __init__(self, model, eps, step_size, n_steps, norm='inf', loss_type='xent', random_start=False, name='GM'):
         super(GM, self).__init__(model, eps, step_size, n_steps, norm, loss_type, random_start, name)
 

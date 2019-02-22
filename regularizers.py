@@ -8,7 +8,7 @@ def L2(kernel, name='L2'):
     return loss
 
 
-def SN_Dense(inputs, kernel, beta=1.0, Ip=1, reuse=False, name='SN_Dense'):
+def SN_Dense(kernel, beta=1.0, Ip=1, reuse=False, name='SN_Dense'):
     def power_iteration(u, w, Ip):
 
         u_ = u
@@ -19,7 +19,6 @@ def SN_Dense(inputs, kernel, beta=1.0, Ip=1, reuse=False, name='SN_Dense'):
 
         return u_, v_
 
-    x_shape = inputs.get_shape().as_list()
     w_shape = kernel.get_shape().as_list()
 
     with tf.variable_scope(name) as scope:
