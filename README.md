@@ -4,7 +4,7 @@ Experiment codes for *Bridging Adversarial Robustness and Gradient Interpretabil
 
 We summarize the results from our paper along with the link to the jupyter notebook that can be used to reproduce the experiment.
 
-## Section 2.1 Adversarial Training Confines Gradient to Image Manifold
+## Section 2.1. Adversarial Training Confines Gradient to Image Manifold
 
 **Section Summary**
 
@@ -32,7 +32,7 @@ CIFAR-10
 :-----------------------------------------------------------------------------------------------------------------:
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/gradient_cifar10_xent.jpg)
 
-## Section 2.2 A Conjecture Under the Boundary Tilting Perspective
+## Section 2.2. A Conjecture Under the Boundary Tilting Perspective
 
 **Section Summary**
 
@@ -46,7 +46,7 @@ Illustration of our conjecture                                                  
 :-------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/boundary_theory.jpg)  |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/boundary_experiment.jpg)
 
-## Section 3.2 Effect of Adversarial Training on Loss Gradient Interpretability
+## Section 3.2. Effect of Adversarial Training on Loss Gradient Interpretability
 
 **Section Summary**
 
@@ -63,7 +63,7 @@ ROAR                                                                            
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_xent.jpg)  |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_xent.jpg)
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_cw.jpg)    |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_cw.jpg)
 
-## Section 3.3 Accuracy and Loss Gradient Interpretability Trade-off
+## Section 3.3. Accuracy and Loss Gradient Interpretability Trade-off
 
 **Section Summary**
 
