@@ -1,6 +1,6 @@
 # Robustness and Interpretability
 
-Official repository for *Bridging Adversarial Robustness and Gradient Interpretability*.
+Experiment codes for *Bridging Adversarial Robustness and Gradient Interpretability*.
 
 ## Results
 
@@ -14,7 +14,17 @@ Notebooks [1.2](https://github.com/1202kbs/Robustness-and-Interpretability/blob/
 
 Notebooks [1.3](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/1.3%20MNIST%20Gradient%20Analysis.ipynb), [2.3](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/2.3%20FMNIST%20Gradient%20Analysis.ipynb) and [3.3](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.3%20CIFAR-10%20Gradient%20Analysis.ipynb) was used to calculate the distance of adversarial examples to their projections onto the image manifold and to visualize the loss gradients and the adversarial examples.
 
+* MNIST
+
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/gradient_mnist_xent.jpg)
+
+* Fashion MNIST
+
+![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/gradient_fmnist_xent.jpg)
+
+* CIFAR-10
+
+![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/gradient_cifar10_xent.jpg)
 
 ### Section 2.2
 
