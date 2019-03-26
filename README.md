@@ -4,17 +4,19 @@ Experiment codes for *Bridging Adversarial Robustness and Gradient Interpretabil
 
 We summarize the results from our paper along with the link to the jupyter notebook that can be used to reproduce the experiment.
 
-## Section 2.1
+## Section 2.1 Adversarial Training Confines Gradient to Image Manifold
 
 **Section Summary**
 
+
+
 **Experiment Procedure**
 
-1. Notebooks [1.1](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/1.1%20MNIST%20VAE-GAN%20Training.ipynb), [2.1](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/2.1%20FMNIST%20VAE-GAN%20Training.ipynb) and [3.1](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.1%20CIFAR%20VAE-GAN%20Training.ipynb) was used to train the VAE-GAN.
+1. Notebooks [1.1](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/1.1%20MNIST%20VAE-GAN%20Training.ipynb), [2.1](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/2.1%20FMNIST%20VAE-GAN%20Training.ipynb) and [3.1](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.1%20CIFAR%20VAE-GAN%20Training.ipynb) were used to train the VAE-GAN.
 
-2. Notebooks [1.2](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/1.2%20MNIST%20Training.ipynb), [2.2](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/2.2%20FMNIST%20Training.ipynb) and [3.2](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.2%20CIFAR-10%20Training.ipynb) was used to adversarially train the networks.
+2. Notebooks [1.2](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/1.2%20MNIST%20Training.ipynb), [2.2](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/2.2%20FMNIST%20Training.ipynb) and [3.2](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.2%20CIFAR-10%20Training.ipynb) were used to adversarially train the networks.
 
-3. Notebooks [1.3](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/1.3%20MNIST%20Gradient%20Analysis.ipynb), [2.3](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/2.3%20FMNIST%20Gradient%20Analysis.ipynb) and [3.3](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.3%20CIFAR-10%20Gradient%20Analysis.ipynb) was used to calculate the distance of adversarial examples to their projections onto the image manifold and to visualize the loss gradients and the adversarial examples.
+3. Notebooks [1.3](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/1.3%20MNIST%20Gradient%20Analysis.ipynb), [2.3](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/2.3%20FMNIST%20Gradient%20Analysis.ipynb) and [3.3](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.3%20CIFAR-10%20Gradient%20Analysis.ipynb) were used to calculate the distance of adversarial examples to their projections onto the image manifold and to visualize the loss gradients and the adversarial examples.
 
 **Results**
 
@@ -30,7 +32,7 @@ CIFAR-10
 :-----------------------------------------------------------------------------------------------------------------:
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/gradient_cifar10_xent.jpg)
 
-## Section 2.2
+## Section 2.2 A Conjecture Under the Boundary Tilting Perspective
 
 **Section Summary**
 
@@ -44,7 +46,7 @@ Illustration of our conjecture                                                  
 :-------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/boundary_theory.jpg)  |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/boundary_experiment.jpg)
 
-## Section 3.1
+## Section 3.2 Effect of Adversarial Training on Loss Gradient Interpretability
 
 **Section Summary**
 
@@ -61,7 +63,7 @@ ROAR                                                                            
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_xent.jpg)  |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_xent.jpg)
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_cw.jpg)    |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_cw.jpg)
 
-## Section 3.2
+## Section 3.3 Accuracy and Loss Gradient Interpretability Trade-off
 
 **Section Summary**
 
