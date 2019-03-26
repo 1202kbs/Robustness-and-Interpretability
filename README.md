@@ -1,10 +1,10 @@
 # Robustness and Interpretability
 
-Experiment codes for *Bridging Adversarial Robustness and Gradient Interpretability*.
+Official repository for *Bridging Adversarial Robustness and Gradient Interpretability*.
 
 ## Results
 
-Here we show the results from each section of our paper. For each result, we link the jupyter notebook that can be used to reproduce the experiment.
+Here we show the results from our paper along with the link to the jupyter notebook that can be used to reproduce the experiment.
 
 ### Section 2.1
 
