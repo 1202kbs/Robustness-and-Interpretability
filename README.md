@@ -41,6 +41,4 @@ Notebook [3.4](https://github.com/1202kbs/Robustness-and-Interpretability/blob/m
 ROAR XEnt                                                                                                |  KAR XEnt
 :-------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_xent.jpg)  |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_xent.jpg)
-ROAR CW                                                                                                  |  KAR CW
-:-------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_cw.jpg)    |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_cw.jpg)
