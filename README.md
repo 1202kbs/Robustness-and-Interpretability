@@ -2,13 +2,11 @@
 
 Experiment codes for *Bridging Adversarial Robustness and Gradient Interpretability*.
 
-## Results
+We summarize the results from our paper along with the link to the jupyter notebook that can be used to reproduce the experiment.
 
-Here we show the results from our paper along with the link to the jupyter notebook that can be used to reproduce the experiment.
+## Section 2.1
 
-### Section 2.1
-
-*Experiment Procedure*
+**Experiment Procedure**
 
 1. Notebooks [1.1](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/1.1%20MNIST%20VAE-GAN%20Training.ipynb), [2.1](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/2.1%20FMNIST%20VAE-GAN%20Training.ipynb) and [3.1](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.1%20CIFAR%20VAE-GAN%20Training.ipynb) was used to train the VAE-GAN.
 
@@ -28,7 +26,7 @@ Here we show the results from our paper along with the link to the jupyter noteb
 
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/gradient_cifar10_xent.jpg)
 
-### Section 2.2
+## Section 2.2
 
 Notebook [4.1](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/4.1%20Mixture%20Gaussian%20Training.ipynb) was used to test our conjecture with a 2-dimensional toy dataset.
 
@@ -36,9 +34,9 @@ Illustration of our conjecture                                                  
 :-------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/boundary_theory.jpg)  |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/boundary_experiment.jpg)
 
-### Section 3.1
+## Section 3.1
 
-*Experiment Procedure*
+**Experiment Procedure**
 
 1. Notebook [3.4](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.4%20CIFAR-10%20ROAR%20KAR.ipynb) was used to run ROAR and KAR for neural networks trained under various adversarial attack settings.
 
@@ -49,7 +47,7 @@ ROAR                                                                            
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_xent.jpg)  |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_xent.jpg)
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_cw.jpg)    |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_cw.jpg)
 
-### Section 3.2
+## Section 3.2
 
 We were also able to discover a trade-off between test accuracy and gradient interpretability under the adversarial training framework.
 
