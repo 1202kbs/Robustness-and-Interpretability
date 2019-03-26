@@ -38,7 +38,12 @@ Illustration of our conjecture                                                  
 
 Notebook [3.4](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.4%20CIFAR-10%20ROAR%20KAR.ipynb) was used to run ROAR and KAR for neural networks trained under various adversarial attack settings. Notebook [3.5](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.5%20CIFAR-10%20Result%20Analysis.ipynb) was used to analyze the relation between the strength of adversary used during training and the interpretability of gradient. It was also used to identify the trade-off between accuracy and gradient interpretability under the adversarial training framework.
 
-ROAR XEnt                                                                                                |  KAR XEnt
+ROAR                                                                                                     |  KAR
 :-------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_xent.jpg)  |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_xent.jpg)
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_cw.jpg)    |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_cw.jpg)
+
+ROAR                                                                                                              |  KAR
+:----------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------:
+![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_xent_tradeoff.jpg)  |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_xent_tradeoff.jpg)
+![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_cw_tradeoff.jpg)    |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_cw_tradeoff.jpg)
