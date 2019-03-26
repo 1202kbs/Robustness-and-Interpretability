@@ -30,7 +30,9 @@ Notebooks [1.3](https://github.com/1202kbs/Robustness-and-Interpretability/blob/
 
 Notebook [4.1](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/4.1%20Mixture%20Gaussian%20Training.ipynb) was used to test our conjecture with a 2-dimensional toy dataset.
 
-![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/boundary_experiment.jpg)
+Illustration of our conjecture                                                                                 | Results on a 2-dimensional toy dataset
+:-------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:
+![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/boundary_theory.jpg)  |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/boundary_experiment.jpg)
 
 ### Section 3
 
