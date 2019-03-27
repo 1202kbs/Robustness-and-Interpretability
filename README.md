@@ -42,11 +42,9 @@ In this section, we proposed a conjecture for why adversarial training conﬁnes
 
 We conjectured adversarial training removes such tilting along directions of low variance in the data (robust decision boundary). Intuitively, this makes sense because a network is robust when only large-*epsilon* attacks are able to cause a nontrivial drop in accuracy, and this  appens when data points of different classes are mirror images of each other with respect to the decision boundary. Since the loss gradient is generally perpendicular to the decision boundary, it will be conﬁned to the image manifold and thus adversarial examples stay within the image manifold.
 
-As a sanity check, we tested our conjecture with a 2-dimensional toy dataset. Speciﬁcally, we trained three two-layer ReLU network to classify points from two distinct bivariate Gaussian distributions. The ﬁrst network is trained on original data and the latter two networks are trained against weak and strong adversaries. We then compared the resulting decision boundaries and the distribution of adversarial examples.
-
 **Experiment Procedure**
 
-Notebook [4.1](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/4.1%20Mixture%20Gaussian%20Training.ipynb) was used to test our conjecture with a 2-dimensional toy dataset.
+As a sanity check, we tested our conjecture with a 2-dimensional toy dataset. Speciﬁcally, we trained three two-layer ReLU network to classify points from two distinct bivariate Gaussian distributions. The ﬁrst network is trained on original data and the latter two networks are trained against weak and strong adversaries. We then compared the resulting decision boundaries and the distribution of adversarial examples. Notebook [4.1](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/4.1%20Mixture%20Gaussian%20Training.ipynb) was used to test our conjecture with a 2-dimensional toy dataset.
 
 **Results**
 
