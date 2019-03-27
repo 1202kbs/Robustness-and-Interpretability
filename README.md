@@ -48,6 +48,8 @@ As a sanity check, we tested our conjecture with a 2-dimensional toy dataset. Sp
 
 **Results**
 
+The decision boundary of the standard DNN is tilted along directions of low variance in the data. Naturally, the adversarial examples leave the data manifold. On the other hand, adversarial training removes the tilt. Hence adversarial perturbations move data points to the manifold of other class. We also observed training against a stronger adversary removes the tilt to a larger degree. This causes adversarial examples to align better with the data manifold. Hence the decision boundary tilting perspective may also account for why adversarial training with stronger attack reduces the distance between an adversarial example and its projection even further.
+
 Illustration of our conjecture                                                                                 | Results on a 2-dimensional toy dataset
 :-------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/boundary_theory.jpg)  |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/boundary_experiment.jpg)
@@ -56,15 +58,19 @@ Illustration of our conjecture                                                  
 
 **Section Summary**
 
+We established a formal framework for evaluating the quantitative interpretability of a given attribution method based on Remove and Retrain (ROAR) and Keep and Retrain (KAR). We then obsered the effect of adversarial training on the quantitative interpretability of two attribution methods Gradient and Gradient * Input.
+
 **Experiment Procedure**
 
 1. Notebook [3.2](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.2%20CIFAR-10%20Training.ipynb) was used to train the network under various adversarial attack settings.
 
 2. Notebook [3.4](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.4%20CIFAR-10%20ROAR%20KAR.ipynb) was used to run ROAR and KAR for neural networks trained under various adversarial attack settings.
 
-3. Notebook [3.5](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.5%20CIFAR-10%20Result%20Analysis.ipynb) was used to analyze the relation between the strength of adversary used during training and the interpretability of gradient. We observed that adversarial training generally enhances the interpretability of attributions.
+3. Notebook [3.5](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/3.5%20CIFAR-10%20Result%20Analysis.ipynb) was used to analyze the relation between the strength of adversary used during training and the interpretability of gradient.
 
 **Results**
+
+We observed that adversarial training generally enhances the interpretability of attributions. This result is signiﬁcant because it shows adversarial training indeed causes the gradient to better reﬂect the internal representation of the DNN. It implies that training with an appropriate “interpretability regularizer” may be enough to produce DNNs that can be interpreted with simple attribution methods such as gradient or Gradient * Input.
 
 ROAR                                                                                                     |  KAR
 :-------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:
@@ -75,7 +81,7 @@ ROAR                                                                            
 
 **Section Summary**
 
-We were also able to discover a trade-off between test accuracy and gradient interpretability under the adversarial training framework.
+Using the results from Section 3.2, we were also able to discover a trade-off between test accuracy and gradient interpretability under the adversarial training framework.
 
 **Experiment Procedure**
 
