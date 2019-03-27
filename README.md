@@ -89,6 +89,8 @@ We reused the codes in Section 3.2.
 
 **Results**
 
+From the results, we saw two potential approaches to resolving this trade-off. First, since the global attribution method Gradient * Input performs better than the local attribution method Gradient, we can explore combinations of adversarial training with other global attribution methods such as Layer-wise Relevance Propagation, DeepLIFT or Integrated Gradient. Second, since there is large performance gain in using l1-training over l2-training in KAR while there is only slight gain in using l2-training over l1-training in ROAR, we can seek better ways of applying l1-training.
+
 ROAR                                                                                                              |  KAR
 :----------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------:
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_xent_tradeoff.jpg)  |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_xent_tradeoff.jpg)
