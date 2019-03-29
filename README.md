@@ -98,7 +98,7 @@ ROAR                                                                            
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_xent_tradeoff.jpg)  |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_xent_tradeoff.jpg)
 ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/roar_cw_tradeoff.jpg)    |  ![alt tag](https://github.com/1202kbs/Robustness-and-Interpretability/blob/master/assets/kar_cw_tradeoff.jpg)
 
-*Citation*
+## Citation
 If you want to cite our work, please use the below `.bib` format.
 ```
 @article{kim2019bridging,
