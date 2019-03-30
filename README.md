@@ -4,7 +4,7 @@ Experiment codes for *Bridging Adversarial Robustness and Gradient Interpretabil
 
 The work is presented at [2019 ICLR Workshop on SafeML](https://sites.google.com/view/safeml-iclr2019).
 
-We summarize the results from our paper along with the link to the jupyter notebook that can be used to reproduce the experiment.
+We summarize the results from our paper along with the links to the jupyter notebooks that can be used to reproduce the experiments.
 
 ## Section 2.1. Adversarial Training Confines Gradient to Image Manifold
 
