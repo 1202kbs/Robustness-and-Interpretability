@@ -1,8 +1,6 @@
 # Robustness and Interpretability
 
-Experiment codes for *Bridging Adversarial Robustness and Gradient Interpretability* ([arXiv](https://arxiv.org/abs/1903.11626)).
-
-The work is presented at [2019 ICLR Workshop on SafeML](https://sites.google.com/view/safeml-iclr2019).
+Experiment codes for *Bridging Adversarial Robustness and Gradient Interpretability*. The full paper is available on ([arXiv](https://arxiv.org/abs/1903.11626)). The work is presented at [2019 ICLR Workshop on SafeML](https://sites.google.com/view/safeml-iclr2019).
 
 We summarize the results from our paper along with the links to the jupyter notebooks that can be used to reproduce the experiments.
 
